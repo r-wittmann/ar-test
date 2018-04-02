@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/91/three.min.js'></script>
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/three.js/build/ar.min.js"></script>
+    <script src="http://mamboleoo.be/learnThree/demos/OBJLoader.js"></script>
 
     <script>THREEx.ArToolkitContext.baseURL = './'</script>
 
@@ -125,29 +126,74 @@
     // mesh.position.y = geometry.parameters.height / 2
     // scene.add(mesh);
 
-    var geometry = new THREE.CylinderGeometry(0.4, 0.4, 1.5, 32, 1, true, 0, 1.75*Math.PI);
-    var material = new THREE.MeshNormalMaterial({
-        side: THREE.DoubleSide
-    });
-    var cylinder = new THREE.Mesh(geometry, material);
-    cylinder.position.y = geometry.parameters.height / 2;
-    scene.add(cylinder);
+    // var geometry = new THREE.CylinderGeometry(0.4, 0.4, 1.5, 32, 1, true, 0, 1.75*Math.PI);
+    // var material = new THREE.MeshNormalMaterial({
+    //     side: THREE.DoubleSide
+    // });
+    // var cylinder = new THREE.Mesh(geometry, material);
+    // cylinder.position.y = geometry.parameters.height / 2;
+    // scene.add(cylinder);
+    //
+    // onRenderFcts.push(function(delta){
+    //     cylinder.rotation.y += Math.PI*delta
+    // })
+    //
+    // var geometry = new THREE.CylinderGeometry(0, 0.4, 0.6, 32, 1, true, 0, 1.75*Math.PI);
+    // var material = new THREE.MeshNormalMaterial({
+    //     side: THREE.DoubleSide
+    // });
+    // var cone = new THREE.Mesh(geometry, material);
+    // cone.position.y = geometry.parameters.height / 2 + 1.5;
+    // scene.add(cone);
 
-    onRenderFcts.push(function(delta){
-        cylinder.rotation.y += Math.PI*delta
-    })
+    // instantiate a loader
+    var loader = new THREE.OBJLoader();
 
-    var geometry = new THREE.CylinderGeometry(0, 0.4, 0.6, 32, 1, true, 0, 1.75*Math.PI);
-    var material = new THREE.MeshNormalMaterial({
-        side: THREE.DoubleSide
-    });
-    var cone = new THREE.Mesh(geometry, material);
-    cone.position.y = geometry.parameters.height / 2 + 1.5;
-    scene.add(cone);
+    // load a resource
+    loader.load(
+        // resource URL
+        THREEx.ArToolkitContext.baseURL + '/data/models/TestBottle/tinker.obj',
+        // called when resource is loaded
+        function(object) {
 
-    onRenderFcts.push(function(delta){
-        cone.rotation.y += Math.PI*delta
-    })
+            object.scale.set(0.05, 0.05, 0.05);
+            // object.position.y = 0.5;
+            object.rotateX(-Math.PI / 2);
+
+            var material = new THREE.MeshNormalMaterial({
+                side: THREE.DoubleSide
+            });
+
+            object.traverse(function(child) {
+
+                if (child instanceof THREE.Mesh) {
+
+                    child.material = material;
+
+                }
+
+            });
+
+            scene.add(object);
+
+        },
+        // called when loading is in progresses
+        function(xhr) {
+
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+
+        },
+        // called when loading has errors
+        function(error) {
+
+            console.log('An error happened');
+
+        }
+    );
+
+    // onRenderFcts.push(function(delta){
+    //     cone.rotation.y += Math.PI*delta
+    // })
     //////////////////////////////////////////////////////////////////////////////////
     //		render the whole thing on the page
     //////////////////////////////////////////////////////////////////////////////////
