@@ -1,1 +1,182 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/91/three.min.js"></script><script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/three.js/build/ar.min.js"></script><script src="https://mamboleoo.be/learnThree/demos/OBJLoader.js"></script><script>THREEx.ArToolkitContext.baseURL="./"</script><title>React App</title></head><body style="margin:0;overflow:hidden;font-family:Monospace"><noscript>You need to enable JavaScript to run this app.</noscript><script>var renderer=new THREE.WebGLRenderer({antialias:!0,alpha:!0});renderer.setClearColor(new THREE.Color("lightgrey"),0),renderer.setSize(640,480),renderer.domElement.style.position="absolute",renderer.domElement.style.top="0px",renderer.domElement.style.left="0px",document.body.appendChild(renderer.domElement);var onRenderFcts=[],scene=new THREE.Scene,camera=new THREE.Camera;scene.add(camera);var arToolkitSource=new THREEx.ArToolkitSource({sourceType:"webcam"});function onResize(){arToolkitSource.onResize(),arToolkitSource.copySizeTo(renderer.domElement),null!==arToolkitContext.arController&&arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)}arToolkitSource.init(function(){onResize()}),window.addEventListener("resize",function(){onResize()});var arToolkitContext=new THREEx.ArToolkitContext({debug:!1,cameraParametersUrl:THREEx.ArToolkitContext.baseURL+"/data/data/camera_para.dat",detectionMode:"mono",maxDetectionRate:60,imageSmoothingEnabled:!0});arToolkitContext.init(function(){camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix())}),onRenderFcts.push(function(){!1!==arToolkitSource.ready&&(arToolkitContext.update(arToolkitSource.domElement),scene.visible=camera.visible)});var markerControls=new THREEx.ArMarkerControls(arToolkitContext,camera,{type:"pattern",patternUrl:THREEx.ArToolkitContext.baseURL+"/data/data/patt.hiro",changeMatrixMode:"cameraTransformMatrix"});scene.visible=!1;var loader=new THREE.OBJLoader;loader.load(THREEx.ArToolkitContext.baseURL+"/data/models/TestBottle/tinker.obj",function(e){e.scale.set(.05,.05,.05),e.rotateX(-Math.PI/2);var o=new THREE.MeshNormalMaterial({side:THREE.DoubleSide});e.traverse(function(e){e instanceof THREE.Mesh&&(e.material=o)}),scene.add(e)},function(e){console.log(e.loaded/e.total*100+"% loaded")},function(e){console.log("An error happened")}),onRenderFcts.push(function(){renderer.render(scene,camera)});var lastTimeMsec=null;requestAnimationFrame(function e(o){requestAnimationFrame(e),lastTimeMsec=lastTimeMsec||o-1e3/60;var r=Math.min(200,o-lastTimeMsec);lastTimeMsec=o,onRenderFcts.forEach(function(e){e(r/1e3,o/1e3)})})</script><script type="text/javascript" src="/static/js/main.99d0c58b.js"></script></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/91/three.min.js"></script><script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/three.js/build/ar.min.js"></script><script src="https://mamboleoo.be/learnThree/demos/OBJLoader.js"></script><script>THREEx.ArToolkitContext.baseURL="./"</script><title>React App</title></head><body style="margin:0;overflow:hidden;font-family:Monospace"><noscript>You need to enable JavaScript to run this app.</noscript><script>//////////////////////////////////////////////////////////////////////////////////
+    //		Init
+    //////////////////////////////////////////////////////////////////////////////////
+    // init renderer
+    var renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
+    });
+    renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+    renderer.setSize(640, 480);
+    renderer.domElement.style.position = 'absolute'
+    renderer.domElement.style.top = '0px'
+    renderer.domElement.style.left = '0px'
+    document.body.appendChild(renderer.domElement);
+    // array of functions for the rendering loop
+    var onRenderFcts = [];
+    // init scene and camera
+    var scene = new THREE.Scene();
+
+    //////////////////////////////////////////////////////////////////////////////////
+    //		Initialize a basic camera
+    //////////////////////////////////////////////////////////////////////////////////
+    // Create a camera
+    var camera = new THREE.Camera();
+    scene.add(camera);
+    ////////////////////////////////////////////////////////////////////////////////
+    //          handle arToolkitSource
+    ////////////////////////////////////////////////////////////////////////////////
+    var arToolkitSource = new THREEx.ArToolkitSource({
+        // to read from the webcam
+        sourceType: 'webcam',
+
+        // // to read from an image
+        // sourceType : 'image',
+        // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
+        // to read from a video
+        // sourceType : 'video',
+        // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
+    })
+    arToolkitSource.init(function onReady() {
+        onResize()
+    })
+
+    // handle resize
+    window.addEventListener('resize', function() {
+        onResize()
+    })
+
+    function onResize() {
+        arToolkitSource.onResize()
+        arToolkitSource.copySizeTo(renderer.domElement)
+        if (arToolkitContext.arController !== null) {
+            arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //          initialize arToolkitContext
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // create atToolkitContext
+    var arToolkitContext = new THREEx.ArToolkitContext({
+        debug: false,
+        cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '/data/data/camera_para.dat',
+        detectionMode: 'mono',
+        maxDetectionRate: 60,
+        imageSmoothingEnabled: true,
+    })
+    // initialize it
+    arToolkitContext.init(function onCompleted() {
+        // copy projection matrix to camera
+        camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+    })
+    // update artoolkit on every frame
+    onRenderFcts.push(function() {
+        if (arToolkitSource.ready === false) return
+        arToolkitContext.update(arToolkitSource.domElement)
+
+        // update scene.visible if the marker is seen
+        scene.visible = camera.visible
+    })
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //          Create a ArMarkerControls
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // init controls for camera
+    var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+        type: 'pattern',
+        patternUrl: THREEx.ArToolkitContext.baseURL + '/data/data/patt.hiro',
+        // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
+        // as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
+        changeMatrixMode: 'cameraTransformMatrix'
+    })
+    // as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
+    scene.visible = false
+    //////////////////////////////////////////////////////////////////////////////////
+    //		add an object in the scene
+    //////////////////////////////////////////////////////////////////////////////////
+    // add a torus knot
+    // var geometry = new THREE.CubeGeometry(1, 1, 0.1);
+    // var material = new THREE.MeshNormalMaterial({
+    //     transparent: true,
+    //     opacity: 0.5,
+    //     side: THREE.DoubleSide
+    // });
+    // var mesh = new THREE.Mesh(geometry, material);
+    // mesh.position.y = geometry.parameters.height / 2
+    // scene.add(mesh);
+
+    // var geometry = new THREE.CylinderGeometry(0.4, 0.4, 1.5, 32, 1, true, 0, 1.75*Math.PI);
+    // var material = new THREE.MeshNormalMaterial({
+    //     side: THREE.DoubleSide
+    // });
+    // var cylinder = new THREE.Mesh(geometry, material);
+    // cylinder.position.y = geometry.parameters.height / 2;
+    // scene.add(cylinder);
+    //
+    // onRenderFcts.push(function(delta){
+    //     cylinder.rotation.y += Math.PI*delta
+    // })
+    //
+    // var geometry = new THREE.CylinderGeometry(0, 0.4, 0.6, 32, 1, true, 0, 1.75*Math.PI);
+    // var material = new THREE.MeshNormalMaterial({
+    //     side: THREE.DoubleSide
+    // });
+    // var cone = new THREE.Mesh(geometry, material);
+    // cone.position.y = geometry.parameters.height / 2 + 1.5;
+    // scene.add(cone);
+
+    // instantiate a loader
+    var loader = new THREE.OBJLoader();
+
+    let flask;
+    // load a resource
+    loader.load(
+        // resource URL
+        THREEx.ArToolkitContext.baseURL + '/data/models/TestBottle/tinker.obj',
+        // called when resource is loaded
+        function(object) {
+
+            object.scale.set(0.04, 0.04, 0.02);
+            object.rotateX(-Math.PI / 2);
+            object.position.z = -0.5;
+
+            var material = new THREE.MeshNormalMaterial({
+                side: THREE.DoubleSide
+            });
+            object.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = material;
+                }
+            });
+            flask = object;
+            scene.add(object);
+        }
+    );
+
+    // onRenderFcts.push(function(delta){
+    //     cone.rotation.y += Math.PI*delta
+    // })
+    //////////////////////////////////////////////////////////////////////////////////
+    //		render the whole thing on the page
+    //////////////////////////////////////////////////////////////////////////////////
+    // render the scene
+    onRenderFcts.push(function() {
+        renderer.render(scene, camera);
+    })
+    // run the rendering loop
+    var lastTimeMsec = null
+    requestAnimationFrame(function animate(nowMsec) {
+        // keep looping
+        requestAnimationFrame(animate);
+        // measure time
+        lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60
+        var deltaMsec = Math.min(200, nowMsec - lastTimeMsec)
+        lastTimeMsec = nowMsec
+        // call each update function
+        onRenderFcts.forEach(function(onRenderFct) {
+            onRenderFct(deltaMsec / 1000, nowMsec / 1000)
+        })
+    })</script><script type="text/javascript" src="/static/js/main.99d0c58b.js"></script></body></html>
