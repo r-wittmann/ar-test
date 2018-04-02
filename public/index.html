@@ -149,6 +149,7 @@
     // instantiate a loader
     var loader = new THREE.OBJLoader();
 
+    let flask;
     // load a resource
     loader.load(
         // resource URL
@@ -156,38 +157,20 @@
         // called when resource is loaded
         function(object) {
 
-            object.scale.set(0.05, 0.05, 0.05);
-            // object.position.y = 0.5;
+            object.scale.set(0.04, 0.04, 0.02);
             object.rotateX(-Math.PI / 2);
+            object.position.z = -0.5;
 
             var material = new THREE.MeshNormalMaterial({
                 side: THREE.DoubleSide
             });
-
             object.traverse(function(child) {
-
                 if (child instanceof THREE.Mesh) {
-
                     child.material = material;
-
                 }
-
             });
-
+            flask = object;
             scene.add(object);
-
-        },
-        // called when loading is in progresses
-        function(xhr) {
-
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-
-        },
-        // called when loading has errors
-        function(error) {
-
-            console.log('An error happened');
-
         }
     );
 
