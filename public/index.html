@@ -111,45 +111,53 @@
         changeMatrixMode: 'cameraTransformMatrix'
     })
     // as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
-    scene.visible = false
+    scene.visible = false;
+    //////////////////////////////////////////////////////////////////////////////////
+    //		add light to the scene
+    //////////////////////////////////////////////////////////////////////////////////
+
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight( 0x404040, 1, 50 );
+    pointLight.position.set( 2, 2, 2 );
+    scene.add(pointLight);
     //////////////////////////////////////////////////////////////////////////////////
     //		add an object in the scene
     //////////////////////////////////////////////////////////////////////////////////
-    // add a torus knot
-    // var geometry = new THREE.CubeGeometry(1, 1, 0.1);
-    // var material = new THREE.MeshNormalMaterial({
-    //     transparent: true,
-    //     opacity: 0.5,
-    //     side: THREE.DoubleSide
-    // });
-    // var mesh = new THREE.Mesh(geometry, material);
-    // mesh.position.y = geometry.parameters.height / 2
-    // scene.add(mesh);
-
-    // var geometry = new THREE.CylinderGeometry(0.4, 0.4, 1.5, 32, 1, true, 0, 1.75*Math.PI);
-    // var material = new THREE.MeshNormalMaterial({
-    //     side: THREE.DoubleSide
-    // });
-    // var cylinder = new THREE.Mesh(geometry, material);
-    // cylinder.position.y = geometry.parameters.height / 2;
-    // scene.add(cylinder);
-    //
-    // onRenderFcts.push(function(delta){
-    //     cylinder.rotation.y += Math.PI*delta
-    // })
-    //
-    // var geometry = new THREE.CylinderGeometry(0, 0.4, 0.6, 32, 1, true, 0, 1.75*Math.PI);
-    // var material = new THREE.MeshNormalMaterial({
-    //     side: THREE.DoubleSide
-    // });
-    // var cone = new THREE.Mesh(geometry, material);
-    // cone.position.y = geometry.parameters.height / 2 + 1.5;
-    // scene.add(cone);
 
     // instantiate a loader
-    var loader = new THREE.OBJLoader();
+    const loader = new THREE.OBJLoader();
 
-    let flask;
+    loader.load(
+        THREEx.ArToolkitContext.baseURL + '/data/models/TestBottleCap/tinker.obj',
+        function(cap) {
+
+            cap.scale.set(0.04, 0.04, 0.02);
+            cap.rotateX(-Math.PI / 2);
+            cap.position.z = -0.5;
+
+            let material = new THREE.MeshPhongMaterial( {
+                color: 0xffffff,
+                specular:0xffffff,
+                flatShading: true,
+                combine: THREE.MultiplyOperation,
+                shininess: 50,
+                reflectivity: 1.0
+            } );
+
+            cap.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = material;
+                }
+            });
+            scene.add(cap);
+        }
+    );
+
+    let bottleMaterial = new THREE.MeshLambertMaterial({
+        color: 0x00ff00
+    });
     // load a resource
     loader.load(
         // resource URL
@@ -161,22 +169,20 @@
             object.rotateX(-Math.PI / 2);
             object.position.z = -0.5;
 
-            var material = new THREE.MeshNormalMaterial({
-                side: THREE.DoubleSide
-            });
             object.traverse(function(child) {
                 if (child instanceof THREE.Mesh) {
-                    child.material = material;
+                    child.material = bottleMaterial;
                 }
             });
-            flask = object;
             scene.add(object);
         }
     );
 
-    // onRenderFcts.push(function(delta){
-    //     cone.rotation.y += Math.PI*delta
-    // })
+    function changeColor() {
+        let randomColor = Math.random().toString(16).slice(2, 8);
+        bottleMaterial.color.setHex('0x' + randomColor);
+    }
+
     //////////////////////////////////////////////////////////////////////////////////
     //		render the whole thing on the page
     //////////////////////////////////////////////////////////////////////////////////
@@ -199,5 +205,6 @@
         })
     })
 </script>
+<button style="position: absolute; bottom: 5px; right: 5px" onclick="changeColor()">Change Color</button>
 </body>
 </html>
