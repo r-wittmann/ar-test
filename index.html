@@ -61,7 +61,7 @@
     // create atToolkitContext
     var arToolkitContext = new THREEx.ArToolkitContext({
         debug: false,
-        cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '/data/data/camera_para.dat',
+        cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
         detectionMode: 'mono',
         maxDetectionRate: 60,
         imageSmoothingEnabled: true,
@@ -87,7 +87,7 @@
     // init controls for camera
     var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
         type: 'pattern',
-        patternUrl: THREEx.ArToolkitContext.baseURL + '/data/data/patt.hiro',
+        patternUrl: THREEx.ArToolkitContext.baseURL + 'data/data/patt.hiro',
         // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
         // as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
         changeMatrixMode: 'cameraTransformMatrix'
@@ -112,7 +112,7 @@
     const loader = new THREE.OBJLoader();
 
     loader.load(
-        THREEx.ArToolkitContext.baseURL + '/data/models/TestBottleCap/tinker.obj',
+        THREEx.ArToolkitContext.baseURL + 'data/models/TestBottleCap/tinker.obj',
         function(cap) {
 
             cap.scale.set(0.04, 0.04, 0.02);
@@ -143,7 +143,7 @@
     // load a resource
     loader.load(
         // resource URL
-        THREEx.ArToolkitContext.baseURL + '/data/models/TestBottle/tinker.obj',
+        THREEx.ArToolkitContext.baseURL + 'data/models/TestBottle/tinker.obj',
         // called when resource is loaded
         function(object) {
 
@@ -184,4 +184,4 @@
         onRenderFcts.forEach(function(onRenderFct) {
             onRenderFct(deltaMsec / 1000, nowMsec / 1000)
         })
-    })</script><div id="root"></div><script type="text/javascript" src="/static/js/main.489048cd.js"></script></body></html>
+    })</script><div id="root"></div><script type="text/javascript" src="/ar-test/static/js/main.19dbcf6a.js"></script></body></html>
