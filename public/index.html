@@ -9,9 +9,19 @@
 
     <script>THREEx.ArToolkitContext.baseURL = './'</script>
 
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            margin : 0px;
+            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+
     <title>React App</title>
 </head>
-<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+<body>
 <noscript>
     You need to enable JavaScript to run this app.
 </noscript>
@@ -178,9 +188,8 @@
         }
     );
 
-    function changeColor() {
-        let randomColor = Math.random().toString(16).slice(2, 8);
-        bottleMaterial.color.setHex('0x' + randomColor);
+    function changeColor(newColor) {
+        bottleMaterial.color.setHex(newColor);
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -205,6 +214,6 @@
         })
     })
 </script>
-<button style="position: absolute; bottom: 5px; right: 5px" onclick="changeColor()">Change Color</button>
+<div id="root"></div>
 </body>
 </html>
