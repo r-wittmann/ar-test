@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/91/three.min.js"></script><script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/three.js/build/ar.min.js"></script><script src="https://mamboleoo.be/learnThree/demos/OBJLoader.js"></script><script>THREEx.ArToolkitContext.baseURL="./"</script><title>React App</title></head><body style="margin:0;overflow:hidden;font-family:Monospace"><noscript>You need to enable JavaScript to run this app.</noscript><script>//////////////////////////////////////////////////////////////////////////////////
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/91/three.min.js"></script><script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/three.js/build/ar.min.js"></script><script src="https://mamboleoo.be/learnThree/demos/OBJLoader.js"></script><script>THREEx.ArToolkitContext.baseURL="./"</script><link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"><style>body{margin:0;overflow:hidden;font-family:Roboto,sans-serif}</style><title>React App</title></head><body><noscript>You need to enable JavaScript to run this app.</noscript><script>//////////////////////////////////////////////////////////////////////////////////
     //		Init
     //////////////////////////////////////////////////////////////////////////////////
     // init renderer
@@ -160,9 +160,8 @@
         }
     );
 
-    function changeColor() {
-        let randomColor = Math.random().toString(16).slice(2, 8);
-        bottleMaterial.color.setHex('0x' + randomColor);
+    function changeColor(newColor) {
+        bottleMaterial.color.setHex(newColor);
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -185,4 +184,4 @@
         onRenderFcts.forEach(function(onRenderFct) {
             onRenderFct(deltaMsec / 1000, nowMsec / 1000)
         })
-    })</script><button style="position:absolute;bottom:5px;right:5px" onclick="changeColor()">Change Color</button><script type="text/javascript" src="/static/js/main.99d0c58b.js"></script></body></html>
+    })</script><div id="root"></div><script type="text/javascript" src="/static/js/main.489048cd.js"></script></body></html>
