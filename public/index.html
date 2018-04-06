@@ -91,8 +91,10 @@
         debug: false,
         cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
         detectionMode: 'mono',
-        maxDetectionRate: 60,
+        maxDetectionRate: 30,
         imageSmoothingEnabled: true,
+        canvasWidth: 80*3,
+        canvasHeight: 60*3,
     })
     // initialize it
     arToolkitContext.init(function onCompleted() {
@@ -129,7 +131,7 @@
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight( 0x404040, 1, 50 );
+    const pointLight = new THREE.PointLight( 0x404040, 2, 50, 2 );
     pointLight.position.set( 2, 2, 2 );
     scene.add(pointLight);
     //////////////////////////////////////////////////////////////////////////////////
