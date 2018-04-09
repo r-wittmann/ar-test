@@ -90,11 +90,11 @@
     var arToolkitContext = new THREEx.ArToolkitContext({
         debug: false,
         cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
-        detectionMode: 'mono',
+        detectionMode: 'color',
         maxDetectionRate: 30,
         imageSmoothingEnabled: true,
-        canvasWidth: 80*3,
-        canvasHeight: 60*3,
+        canvasWidth: 80*4,
+        canvasHeight: 60*4,
     })
     // initialize it
     arToolkitContext.init(function onCompleted() {
@@ -141,13 +141,17 @@
     // instantiate a loader
     const loader = new THREE.OBJLoader();
 
+    function scaleRotatePosition(object) {
+        object.scale.set(0.04, 0.04, 0.02);
+        object.rotateX(-1.65);
+        object.position.z = -0.5;
+    }
+
     loader.load(
         THREEx.ArToolkitContext.baseURL + 'data/models/TestBottleCap/tinker.obj',
         function(cap) {
 
-            cap.scale.set(0.04, 0.04, 0.02);
-            cap.rotateX(-Math.PI / 2);
-            cap.position.z = -0.5;
+            scaleRotatePosition(cap);
 
             let material = new THREE.MeshPhongMaterial( {
                 color: 0xffffff,
@@ -168,7 +172,7 @@
     );
 
     let bottleMaterial = new THREE.MeshLambertMaterial({
-        color: 0x00ff00
+        color: 0xff0000
     });
     // load a resource
     loader.load(
@@ -177,9 +181,7 @@
         // called when resource is loaded
         function(object) {
 
-            object.scale.set(0.04, 0.04, 0.02);
-            object.rotateX(-Math.PI / 2);
-            object.position.z = -0.5;
+            scaleRotatePosition(object);
 
             object.traverse(function(child) {
                 if (child instanceof THREE.Mesh) {
